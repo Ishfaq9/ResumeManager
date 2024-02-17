@@ -1,0 +1,253 @@
+﻿@model ResumeManager.Models.Applicant
+
+@{
+    ViewData["Title"] = "Create Applicant";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<<<<<<< HEAD
+
+<style>
+    .section-header {
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 20px;
+        /* Background color green */
+        text-align: center;
+        border-bottom: 2px solid #ccc; /* Adding a bottom border */
+        padding-bottom: 10px; /* Adding some space below the header */
+    }
+
+    .column-header {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .custom-border {
+        border: 2px solid #ccc;
+        padding: 20px;
+    }
+</style>
+=======
+
+>>>>>>> 2910feb24d028988df5de4bf32a91ecd9aa9cfe2
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card custom-border">
+                <div class="card-header bg-success text-white section-header">
+                    <h4>Create Applicant</h4>
+                </div>
+<<<<<<< HEAD
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender">Gender:</label>
+                                    <input asp-for="Gender" class="form-control" />
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="age">Age:</label>
+                                    <input asp-for="Age" class="form-control" />
+                                    <span asp-validation-for="Age" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="qualification">Qualification:</label>
+                                    <input asp-for="Qualification" class="form-control" />
+                                    <span asp-validation-for="Qualification" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="totalExperience">Total Experience (Years):</label>
+                            <input asp-for="TotalExperience" class="form-control" />
+                            <span asp-validation-for="TotalExperience" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PhotoUrl" class="control-label">Photo:</label>
+                            <input asp-for="PhotoUrl" class="form-control" />
+                            <span asp-validation-for="PhotoUrl" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <h2 class="section-header bg-success text-white section-header">Work Experience</h2>
+                        <table id="experiencesTable" class="table">
+=======
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Gender" class="control-label"></label>
+                        <input asp-for="Gender" class="form-control" />
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Age" class="control-label"></label>
+                        <input asp-for="Age" class="form-control" />
+                        <span asp-validation-for="Age" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Qualification" class="control-label"></label>
+                        <input asp-for="Qualification" class="form-control" />
+                        <span asp-validation-for="Qualification" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="TotalExperience" class="control-label"></label>
+                        <input asp-for="TotalExperience" class="form-control" readonly />
+                       @*  <span asp-validation-for="TotalExperience" class="text-danger"></span> *@
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="PhotoUrl" class="control-label"></label>
+                        <input asp-for="PhotoUrl" class="form-control" />
+                        <span asp-validation-for="PhotoUrl" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="container col-12">
+                    <div class="col-md-12 p-0 m-0 bg-light" style="height:120px; overflow-y:auto;">
+                        <table id="ExpTable" class="table  table-sm ">
+>>>>>>> 2910feb24d028988df5de4bf32a91ecd9aa9cfe2
+                            <thead>
+                                <tr>
+                                    <th class="column-header">Company Name</th>
+                                    <th class="column-header">Designation</th>
+                                    <th class="column-header">Years Worked</th>
+                                    <th class="column-header">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="templateRow">
+                                    <!-- Template row -->
+                                    <td>
+                                        <input type="text" name="Experiences[0].CompanyName" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="Experiences[0].Designation" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="Experiences[0].YearsWorked" class="form-control" min="1" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger remove-experience">Remove</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <button type="button" class="btn btn-primary add-experience">Add Experience</button>
+                        <input type="submit" value="Create" class="btn btn-success ml-2" />
+
+<<<<<<< HEAD
+                        <a asp-action="Index" class="btn btn-secondary ml-2">Back</a>
+                    </form>
+=======
+                    </div>
+                </div> 
+               
+                
+                 <input type="hidden" id="hdnLastIndex" value="0" /> 
+
+                <table>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td><strong>Total Years: </strong></td>
+                            <td id="totalYears">0</td>
+                        </tr>
+                    </table>
+                <div class="col-12 btn-group ">
+                    
+                    <div class="col-6 form-group text-right p-2 justify-content-end d-flex">
+                        <a asp-action="Index" class="btn btn-secondary">&nbsp; Back&nbsp; </a>
+                    </div>
+                    <div class="col-6 form-group text-left p-2">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+>>>>>>> 2910feb24d028988df5de4bf32a91ecd9aa9cfe2
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<<<<<<< HEAD
+@section Scripts {
+    <script>
+        $(document).on('input', 'input[name$=".YearsWorked"]', function () {
+            updateTotalYears();
+        });
+        function updateTotalYears() {
+
+            var sum = 0;
+
+            $("#experiencesTable tbody tr").each(function () {
+
+                //console.log(parseFloat($(this).find("input[name$='.YearsWorked']").val()));
+                var yearsWorked = parseInt($(this).find("input[name$='.YearsWorked']").val());
+
+                sum += yearsWorked;
+
+            });
+
+            $("#TotalExperience").val(sum);
+
+        }
+        $(document).ready(function () {
+
+            // Use jQuery for event handling and DOM manipulation
+            $(".add-experience").click(function () {
+
+                var table = $("#experiencesTable tbody");
+                var templateRow = $("#templateRow").clone(); // Clone the template row
+
+                // Clear input values in the cloned row
+                templateRow.find("input").val("");
+
+                // Get the new index based on the number of existing rows
+                var newIndex = table.find("tr").length;
+
+                // Update input names to include the new index
+                templateRow.find("input").each(function () {
+                    var name = $(this).attr("name");
+                    $(this).attr("name", name.replace(/\[\d+\]/, "[" + newIndex + "]"));
+                });
+                updateTotalYears();
+                // Add remove button event handler to the cloned row
+                templateRow.find(".remove-experience").click(function () {
+                    $(this).closest("tr").remove();
+                    // Re-index the remaining rows
+                    table.find("tr").each(function (index) {
+                        $(this).find("input").each(function () {
+                            var name = $(this).attr("name");
+                            $(this).attr("name", name.replace(/\[\d+\]/, "[" + index + "]"));
+                        });
+                    });
+                    updateTotalYears();
+                });
+
+                // Append the cloned row to the table
+                table.append(templateRow);
+            });
+        });
+    </script>
+=======
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    
+>>>>>>> 2910feb24d028988df5de4bf32a91ecd9aa9cfe2
+}

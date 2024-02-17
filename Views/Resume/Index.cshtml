@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ResumeManager.Models.Applicant>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    /* Custom CSS for enhanced styling */
+    .btn-action {
+        margin-right: 5px;
+    }
+
+    .table-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .btn-create {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center">Applicants</h1>
+        </div>
+    </div>
+    <div class="row justify-content-start">
+        <div class="col-md-6">
+            <a asp-action="Create" class="btn btn-success btn-create">Create New</a>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Gender</th>
+                    <th class="text-center">Age</th>
+                    <th class="text-center">Qualification</th>
+                    <th class="text-center">Total Experience</th>
+                    <th class="text-center">Photo</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td class="text-center">@Html.DisplayFor(modelItem => item.Gender)</td>
+                        <td class="text-center">@Html.DisplayFor(modelItem => item.Age)</td>
+                        <td class="text-center">@Html.DisplayFor(modelItem => item.Qualification)</td>
+                        <td class="text-center">@Html.DisplayFor(modelItem => item.TotalExperience)</td>
+                        <td class="text-center">@Html.DisplayFor(modelItem => item.PhotoUrl)</td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-action">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-action">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-action">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+   
+</div>
