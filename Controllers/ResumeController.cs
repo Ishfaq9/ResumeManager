@@ -46,6 +46,7 @@ namespace ResumeManager.Controllers
 
         }
 
+
         [HttpGet]
         public IActionResult Details(int Id)
         {
