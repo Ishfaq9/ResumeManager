@@ -1,0 +1,116 @@
+﻿@model ResumeManager.Models.Group
+
+@{
+    ViewData["Title"] = "ImportMembers3";
+}
+
+<h1>ImportMembers3</h1>
+
+<main class="main">
+    <section class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="message_div">
+                    <label id="error" style="color:#24959b">  @ViewBag.message </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 template-form">
+                <form asp-controller="FileHandle" asp-action="ImportMembers3" method="post" enctype="multipart/form-data">
+
+                    <input type="hidden" asp-for="Id" value="0" />
+                    <input type="hidden" asp-for="CampaignType" value="GENERAL" />
+                    
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label style="width: 30%;">
+                                Upload Number List
+                                <input type="file" name="fileupload" id="fileupload" placeholder="campaign"
+                                       style="width:283px;padding: 1rem;background: #87d7e2;margin-top: 0.6rem;" accept=".txt" />
+                            </label>
+                            <span style="margin-left: 6rem;">Upload Numbers (.txt)</span>
+                        </div>
+
+                        <div class="col-md-12 ">
+                            <label style="width: 20%;">
+                                List name(*)
+                                <input type="text" asp-for="Name" name="Name" id="TemplateName" placeholder="Template Name" required />
+                            </label>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label style="width: 20%;">
+                                Remarks
+                                <input type="text" asp-for="Description" name="Description" id="Remarks" placeholder="Remarks">
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <table id="experiencesTable" class="table">
+                        <tbody id="tableBody">
+                            <tr id="templateRow">
+                                
+                                <td>
+                                    <input type="hidden" name="Members[0].PhoneNumber" value="" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="hidden" name="Members[0].Name" value="Ishfaq" class="form-control" />
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="form-actions">
+                        <input type="submit" class="rs-btn" value="Save">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+
+        document.getElementById('fileupload').addEventListener('change', function (event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+                var contents = event.target.result;
+                var lines = contents.split('\n');
+                var firstLine = lines[0].trim();
+
+                if (firstLine === 'MobileNumber') {
+                    var numbers = [];
+                    var tableBody = document.getElementById('tableBody');
+                    for (var i = 1; i < lines.length; i++) {
+                        var number = lines[i].trim();
+                        if (number.length > 0 && number.length == 13) {
+                            numbers.push(number);
+                            var newRow = document.createElement('tr');
+                            newRow.innerHTML = `
+                                <td>
+                                    <input type="hidden" name="Members[${i}].PhoneNumber" value="${number}" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="hidden" name="Members[${i}].Name" value="Ishfaq" class="form-control" />
+                                </td>
+                            `;
+                            tableBody.appendChild(newRow);
+                        }
+                    }
+                   // document.getElementById('fileContents').textContent = numbers;
+                } else {
+                    alert("Invalid file format");
+                    console.log('Invalid file format');
+                    //document.getElementById('fileContents').textContent = "";
+                }
+            };
+            reader.readAsText(file);
+        });
+
+</script>

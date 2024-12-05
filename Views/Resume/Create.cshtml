@@ -1,0 +1,144 @@
+﻿@model ResumeManager.Models.Applicant
+
+@{
+    ViewData["Title"] = "Create Applicant";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create Applicant</h1>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <input asp-for="Gender" class="form-control" />
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="age">Age:</label>
+        <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="qualification">Qualification:</label>
+        <input asp-for="Qualification" class="form-control" />
+        <span asp-validation-for="Qualification" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="totalExperience">Total Experience (Years):</label>
+        <input asp-for="TotalExperience" class="form-control" />
+        <span asp-validation-for="TotalExperience" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PhotoUrl" class="control-label"></label>
+        <input asp-for="PhotoUrl" class="form-control" />
+        <span asp-validation-for="PhotoUrl" class="text-danger"></span>
+    </div>
+
+
+    <h2>Work Experience</h2>
+    <table id="experiencesTable">
+        <thead>
+            <tr>
+                <th>Company Name</th>
+                <th>Designation</th>
+                <th>Years Worked</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="templateRow">
+                <!-- Template row -->
+                <td>
+                    <input type="text" name="Experiences[0].CompanyName" class="form-control" />
+                </td>
+                <td>
+                    <input type="text" name="Experiences[0].Designation" class="form-control" />
+                </td>
+                <td>
+                    <input type="number" name="Experiences[0].YearsWorked" class="form-control" min="1" />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger remove-experience">Remove</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-primary add-experience">Add Experience</button>
+
+    <div class="col-12 btn-group ">
+        <div class="col-6 form-group text-right p-2 justify-content-end d-flex">
+            <a asp-action="Index" class="btn btn-secondary">&nbsp; Back&nbsp; </a>
+        </div>
+        <div class="col-6 form-group text-left p-2">
+            <input type="submit" value="Create" class="btn btn-success" />
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+
+
+    <script>
+        $(document).on('input', 'input[name$=".YearsWorked"]', function () {
+            updateTotalYears();
+        });
+        function updateTotalYears() {
+
+            var sum = 0;
+
+            $("#experiencesTable tbody tr").each(function () {
+
+                //console.log(parseFloat($(this).find("input[name$='.YearsWorked']").val()));
+                var yearsWorked = parseInt($(this).find("input[name$='.YearsWorked']").val());
+
+                sum += yearsWorked;
+
+            });
+
+            $("#TotalExperience").val(sum);
+
+        }
+        $(document).ready(function () {
+
+
+            $(".add-experience").click(function () {
+
+                var table = $("#experiencesTable tbody");
+                var templateRow = $("#templateRow").clone();
+
+                templateRow.find("input").val("");
+                var newIndex = table.find("tr").length;
+
+                templateRow.find("input").each(function () {
+                    var name = $(this).attr("name");
+                    $(this).attr("name", name.replace(/\[\d+\]/, "[" + newIndex + "]"));
+                });
+                updateTotalYears();
+
+                templateRow.find(".remove-experience").click(function () {
+                    $(this).closest("tr").remove();
+
+                    table.find("tr").each(function (index) {
+                        $(this).find("input").each(function () {
+                            var name = $(this).attr("name");
+                            $(this).attr("name", name.replace(/\[\d+\]/, "[" + index + "]"));
+                        });
+                    });
+                    updateTotalYears();
+                });
+                table.append(templateRow);
+            });
+        });
+    </script>
+
+
+
+
+}

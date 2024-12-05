@@ -1,0 +1,181 @@
+﻿@model IEnumerable<ResumeManager.Models.Applicant>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    /* Custom CSS for enhanced styling */
+    .btn-action {
+        margin-right: 5px;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-between align-items-center mb-3">
+        <div class="col-8">
+            <h1>Applicants</h1>
+        </div>
+        <div class="col-4 text-right">
+            <a asp-action="Create" class="btn btn-success">Create New</a>
+        </div>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Age</th>
+                <th>Qualification</th>
+                <th>Total Experience</th>
+                <th>Photo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Age)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Qualification)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalExperience)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PhotoUrl)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-action">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-action">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-action">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div id="message_div">
+            <label id="error" style="color:#24959b">  @ViewBag.message </label>
+        </div>
+    </div>
+</div>
+
+
+<form method="post" enctype="multipart/form-data" action="/FileHandle/UploadFiles">
+    <div class="col-md-12">
+        <label style="width: 20%;">
+            Upload Numbers
+            <input type="file" name="fileupload" id="fileupload" placeholder="campaign"
+                   style="width:300px;padding: 1rem;background: #87d7e2" accept=".csv, .txt" />
+        </label>
+        <span style="margin-left: 3rem;">Upload Numbers (.csv) or (.txt)</span>
+        <pre id="fileContents"></pre> 
+       @*  <button type="submit" class="btn-action">Submit</button> *@
+    </div>
+</form>
+@* <script>
+    function uploadFile() {
+        var fileInput = document.getElementById('fileupload');
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            url: '/YourController/YourAction',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $('#error').text(response)
+            },
+            error: function () {
+                $('#error').text(response)
+            }
+        });
+    }
+</script> *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text File Reader</title>
+</head>
+<body>
+    @* <input type="file" id="fileInput">
+    <pre id="fileContents"></pre> *@
+
+    <script>
+        document.getElementById('fileupload').addEventListener('change', function (event) {
+          
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+            
+                var contents = event.target.result;
+                var lines = contents.split('\n');
+                var firstLine = lines[0].trim();
+
+                if (firstLine === 'MobileNumber') {
+                    var numbers = [];
+                    for (var i = 1; i < lines.length; i++) {
+                        var number = lines[i].trim();
+                        if (number.length > 0 && number.length <= 13) {
+                            var DtaileObj = new Object();
+                            DtaileObj.PhoneNumber = number;
+                            numbers.push(DtaileObj);
+                        }
+
+                        document.getElementById('fileContents').textContent = numbers;
+                        console.log(numbers[i - 1]);
+                    }
+                    var Masterobj = new Object();
+                    Masterobj.CampaignType= "Genral";
+                    Masterobj.Description= "ok"
+                    Masterobj.Members = numbers;
+                    $.ajax({
+                        url: '/filehandle/ImportMembers2',
+                        data: { model: Masterobj },
+                        type: 'POST',
+                        success: function (response) {
+                            if (response != null || response != "" || response.length != 0) {
+                                alert("member imported succesfully");
+                            }
+                        },
+                        error: function () {
+                            alert("Unable to import members");
+                        }
+                    });
+
+                } else {
+                    alert("Invalid file format");
+                    console.log('Invalid file format');
+                    document.getElementById('fileContents').textContent = "";
+                }
+            };
+            reader.readAsText(file);
+        });
+    </script>
+
+
+   @*  <script>
+        document.getElementById('fileupload').addEventListener('change', function (event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+                var contents = event.target.result;
+                document.getElementById('fileContents').textContent = contents;
+            };
+
+            reader.readAsText(file);
+        });
+    </script> *@
+</body>
+</html>

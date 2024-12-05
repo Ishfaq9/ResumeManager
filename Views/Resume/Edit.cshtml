@@ -1,0 +1,165 @@
+﻿@model ResumeManager.Models.Applicant
+
+<h1>Edit Applicant</h1>
+<form id="editForm" asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <input asp-for="Gender" class="form-control" />
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="age">Age:</label>
+        <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="qualification">Qualification:</label>
+        <input asp-for="Qualification" class="form-control" />
+        <span asp-validation-for="Qualification" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="totalExperience">Total Experience (Years):</label>
+        <input asp-for="TotalExperience" class="form-control" />
+        <span asp-validation-for="TotalExperience" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PhotoUrl" class="control-label"></label>
+        <input asp-for="PhotoUrl" class="form-control" />
+        <span asp-validation-for="PhotoUrl" class="text-danger"></span>
+    </div>
+
+    <h2>Work Experience</h2>
+    <table id="experiencesTable" class="table">
+        <thead>
+            <tr>
+                <th>Company Name</th>
+                <th>Designation</th>
+                <th>Years Worked</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for (int i = 0; i < Model.Experiences.Count; i++)
+            {
+                <tr id="templeteRow">
+                    <td>
+                        <input type="hidden" asp-for="@Model.Experiences[i].ExperienceId" />
+                        <input type="text" name="Experiences[@i].CompanyName" class="form-control" value="@Model.Experiences[i].CompanyName" />
+                    </td>
+                    <td>
+                        <input type="text" name="Experiences[@i].Designation" class="form-control" value="@Model.Experiences[i].Designation" />
+                    </td>
+                    <td>
+                        <input type="number" name="Experiences[@i].YearsWorked" class="form-control" value="@Model.Experiences[i].YearsWorked" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-experience" data-index="@i">Remove</button>
+                    </td>
+                    <td>
+                        <input type="hidden" name="Experiences[@i].IsDeleted" value="false" />
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-primary add-experience">Add Experience</button>
+    <br />
+    <div class="form-group">
+        <input type="submit" value="Save Changes" class="btn btn-success" />
+    </div>
+    <div class="col-6 form-group text-right p-2 justify-content-end d-flex">
+        <a asp-action="Index" class="btn btn-secondary">&nbsp; Back&nbsp; </a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).on('input', 'input[name$=".YearsWorked"]', function () {
+            updateTotalYears();
+        });
+        function updateTotalYears() {
+
+            var sum = 0;
+
+            $("#experiencesTable tbody tr").each(function () {
+
+                //console.log(parseFloat($(this).find("input[name$='.YearsWorked']").val()));
+                var yearsWorked = parseInt($(this).find("input[name$='.YearsWorked']").val());
+
+                sum += yearsWorked;
+
+            });
+
+            $("#TotalExperience").val(sum);
+
+        }
+
+
+        $(".add-experience").click(function () {
+            // var table = $("#experiencesTable tbody");
+
+            // var newIndex = table.find("tr").length;
+            // var newRow = '<tr>' +
+            //     '<td><input type="text" name="NewExperiences[' + newIndex + '].CompanyName" class="form-control" /></td>' +
+            //     '<td><input type="text" name="NewExperiences[' + newIndex + '].Designation" class="form-control" /></td>' +
+            //     '<td><input type="number" name="NewExperiences[' + newIndex + '].YearsWorked" class="form-control" min="1" /></td>' +
+            //     '<td><button type="button" class="btn btn-danger remove-experience">Remove</button></td>' +
+            //     '</tr>';
+            // table.append(newRow);
+            // $("#editForm").append('<input type="hidden" name="NewExperiences.Index" value="' + newIndex + '">');
+            // $("#editForm").append('<input type="hidden" name="NewExperiences[' + newIndex + '].IsDeleted" value="false" />');
+        
+            var table = $('#experiencesTable tbody');
+            var newIndex = table.find("tr").length;
+            console.log(newIndex)
+            if (table.length == 0 || table.length=="" || table.length == null) {
+                var newRow = '<tr>' +
+                    '<td><input type="text" name="NewExperiences[' + newIndex + '].CompanyName" class="form-control" /></td>' +
+                    '<td><input type="text" name="NewExperiences[' + newIndex + '].Designation" class="form-control" /></td>' +
+                    '<td><input type="number" name="NewExperiences[' + newIndex + '].YearsWorked" class="form-control" min="1" /></td>' +
+                    '<td><button type="button" class="btn btn-danger remove-experience">Remove</button></td>' +
+                    '</tr>';
+            } else {
+                var newrow = $('#templeteRow').clone();
+            }
+            
+            newrow.find("input").val("");
+            //var newIndex = table.find("tr").length;
+            // Update input names to include the new index
+            newrow.find("input").each(function () {
+                var name = $(this).attr("name");
+                $(this).attr("name", name.replace(/\[\d+\]/, "[" + newIndex + "]"));
+            });
+
+            table.append(newrow);
+        });
+
+        $(document).on("click", ".remove-experience", function () {
+         
+            var index = $(this).closest("tr").index(); // Get the index of the row to delete
+            //var experienceId = $("input[name='Experiences[" + index + "].ExperienceId']").val();
+            // if (experienceId) {
+            //     $("input[name='Experiences[" + index + "].IsDeleted']").val("true");
+            // } else {
+            //     $("input[name='NewExperiences[" + index + "].IsDeleted']").val("true");
+            // }
+            $("input[name='Experiences[" + index + "].IsDeleted']").val("true");
+           
+            $(this).closest("tr").hide();
+            updateTotalYears();
+        });
+       
+
+    </script>
+}
